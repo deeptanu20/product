@@ -4,7 +4,7 @@ export const createService = async (req, res) => {
   try {
     const service = await Service.create({
       ...req.body,
-      provider: req.user._id,
+      provider: req.users._id,
     });
     res.status(201).json(service);
   } catch (error) {
@@ -27,7 +27,7 @@ export const getServices = async (req, res) => {
     if (rating) query.rating = { $gte: Number(rating) };
 
     const services = await Service.find(query)
-      .populate('provider', 'name')
+      // .populate('provider', 'name')
       .populate('reviews');
       
     res.json(services);
@@ -39,7 +39,7 @@ export const getServices = async (req, res) => {
 export const getServiceById = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id)
-      .populate('provider', 'name')
+      // .populate('provider', 'name')
       .populate({
         path: 'reviews',
         populate: { path: 'user', select: 'name' },
@@ -63,9 +63,9 @@ export const updateService = async (req, res) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    if (service.provider.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(401).json({ message: 'Not authorized' });
-    }
+    // if (service.provider.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    //   return res.status(401).json({ message: 'Not authorized' });
+    // }
 
     const updatedService = await Service.findByIdAndUpdate(
       req.params.id,
@@ -102,9 +102,9 @@ export const updateAvailability = async (req, res) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    if (service.provider.toString() !== req.user._id.toString()) {
-      return res.status(401).json({ message: 'Not authorized' });
-    }
+    // if (service.provider.toString() !== req.user._id.toString()) {
+    //   return res.status(401).json({ message: 'Not authorized' });
+    // }
 
     service.availability = req.body.availability;
     await service.save();

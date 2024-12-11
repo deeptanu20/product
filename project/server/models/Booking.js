@@ -11,11 +11,11 @@ const bookingSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  provider: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
+  // provider: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'User',
+  //   required: true,
+  // },
   date: {
     type: Date,
     required: true,

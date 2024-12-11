@@ -12,16 +12,16 @@ const serviceSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-  },
+  },  
   price: {
     type: Number,
     required: true,
   },
   image: String,
-  provider: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
+  // provider: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'User',
+  // },
   rating: {
     type: Number,
     default: 0,

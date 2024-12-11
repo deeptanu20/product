@@ -10,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.post('/', protect, createBooking);
-router.get('/', protect, getBookings);
-router.get('/:id', protect, getBookingById);
-router.put('/:id/status', protect, provider, updateBookingStatus);
-router.put('/:id/cancel', protect, cancelBooking);
+router.post('/',  createBooking); //protect
+router.get('/',  getBookings); //protect
+router.get('/:id',  getBookingById);//protect
+router.put('/:id/status',  updateBookingStatus);//protect, provider,
+router.put('/:id/cancel',  cancelBooking);//protect
 
 export default router;
