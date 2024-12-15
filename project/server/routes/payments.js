@@ -8,8 +8,8 @@ import {
 
 const router = express.Router();
 
-router.post('/create-intent', protect, createPaymentIntent);
-router.post('/confirm', protect, confirmPayment);
-router.post('/refund', protect, refundPayment);
+router.post('/create-intent',  createPaymentIntent);//protect
+router.post('/confirm',  confirmPayment);//protect
+router.post('/refund',  refundPayment);//protect
 
 export default router;

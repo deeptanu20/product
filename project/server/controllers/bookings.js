@@ -7,14 +7,15 @@ export const createBooking = async (req, res) => {
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
-
+    
+    console.log(req.body.user);
     const booking = await Booking.create({
       service: req.body.serviceId,
-      user: req.user._id,
-      provider: service.provider,
+      user: req.body.user,
+      // provider: service.provider,
       date: req.body.date,
       time: req.body.time,
-      price: service.price,
+      price: req.body.price,
       address: req.body.address,
       notes: req.body.notes,
     });
@@ -29,16 +30,18 @@ export const getBookings = async (req, res) => {
   try {
     let query = {};
     
-    if (req.user.role === 'user') {
-      query.user = req.user._id;
-    } else if (req.user.role === 'provider') {
+    console.log(req.body.user.role)
+    if (req.body.user.role === 'user') {
+      query.user = req.body.user._id;
+    } 
+    else if (req.user.role === 'provider') {
       query.provider = req.user._id;
     }
 
     const bookings = await Booking.find(query)
       .populate('service')
       .populate('user', 'name email')
-      .populate('provider', 'name email')
+      // .populate('provider', 'name email')
       .sort('-createdAt');
 
     res.json(bookings);

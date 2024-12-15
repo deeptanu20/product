@@ -11,11 +11,11 @@ import {
 
 const router = express.Router();
 
-router.post('/', protect, provider, createService);
+router.post('/', createService); //protect,provider, 
 router.get('/', getServices);
 router.get('/:id', getServiceById);
-router.put('/:id', protect, provider, updateService);
-router.delete('/:id', protect, admin, deleteService);
-router.put('/:id/availability', protect, provider, updateAvailability);
+router.put('/:id',   updateService); //protect,provider,
+router.delete('/:id',  deleteService); //protect, admin,
+router.put('/:id/availability', updateAvailability); //protect,provider, 
 
 export default router;
