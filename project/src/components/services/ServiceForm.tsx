@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // import { Camera } from 'lucide-react';
 // import { toast } from 'react-hot-toast';
-import type { CreateServiceData } from '../types/service';
+import type { CreateServiceData } from '../../types/service';
 
 interface ServiceFormProps {
   onSubmit: (data: CreateServiceData) => Promise<void>;
