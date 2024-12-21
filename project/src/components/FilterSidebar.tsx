@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import React from 'react';
+>>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 import { Filter, Star } from 'lucide-react';
 import { cn } from '../lib/utils';
 

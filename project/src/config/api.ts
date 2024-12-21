@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 export const API_BASE_URL = 'http://localhost:5000/api';
+=======
+export const API_BASE_URL = 'http://localhost:6000/api';
+>>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 
 export const API_ENDPOINTS = {
   auth: {

@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+<<<<<<< HEAD
 const JWT_SECRET=123;
+=======
+>>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 
 export const protect = async (req, res, next) => {
   try {
@@ -10,7 +13,11 @@ export const protect = async (req, res, next) => {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
+<<<<<<< HEAD
     const decoded = jwt.verify(token,JWT_SECRET );
+=======
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+>>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
     req.user = await User.findById(decoded.id).select('-password');
     next();
   } catch (error) {
