@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { Navbar } from "./components/Navbar";
-// import { PrivateRoute } from './components/PrivateRoute';
 import { Home } from "./pages/Home";
 import { Services } from "./pages/Services";
-import { BookingPage } from "./pages/BookingPage";
+import { BookingPage } from './pages/BookingPage';
 import { Bookings } from "./pages/Bookings";
 import { Profile } from "./pages/Profile";
 import { SignIn } from "./pages/auth/SignIn";
@@ -29,7 +28,7 @@ function App() {
             <Route path="bookings" element={<AdminBookings />} />
           </Route>
 
-          {/* User Routes */}
+          {/* Main Routes */}
           <Route
             path="*"
             element={
@@ -41,7 +40,7 @@ function App() {
                   <Route path="/book/:serviceId" element={<BookingPage />} />
                   <Route path="/bookings" element={<Bookings />} />
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/contact" element={<ContactPage/>}/>
+                  <Route path="/contact" element={<ContactPage />} />
                 </Routes>
               </>
             }

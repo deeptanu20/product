@@ -1,10 +1,8 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { bookingApi } from '../lib/api/booking';
-import type { CreateBookingData } from '../types/booking';
-import type { Booking } from '../types/index';
+import type { CreateBookingData} from '../types/booking';
 
 export function useCreateBooking() {
   const navigate = useNavigate();

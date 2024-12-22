@@ -1,41 +1,12 @@
 import React from 'react';
 import { Clock, Calendar, MapPin, CheckCircle, XCircle } from 'lucide-react';
 import { cn, formatPrice } from '../lib/utils';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { useBookings } from '../hooks/useBookings';
 import { type Booking } from '../types';
-import { SERVICES } from '../data/services';
-
-
-const MOCK_BOOKINGS: Booking[] = [
-  {
-    id: '1',
-    serviceId: '1',
-    userId: 'user1',
-    date: '2024-03-20T10:00:00Z',
-    status: 'confirmed',
-    price: 99.99,
-  },
-  {
-    id: '2',
-    serviceId: '2',
-    userId: 'user1',
-    date: '2024-03-22T14:00:00Z',
-    status: 'pending',
-    price: 85.00,
-  },
-  {
-    id: '3',
-    serviceId: '3',
-    userId: 'user1',
-    date: '2024-03-18T09:00:00Z',
-    status: 'completed',
-    price: 120.00,
-  },
-];
 
 function BookingCard({ booking }: { booking: Booking }) {
-  const service = SERVICES.find(s => s.id === booking.serviceId);
-  if (!service) return null;
-
   const bookingDate = new Date(booking.date);
 
   const statusStyles = {
@@ -56,7 +27,7 @@ function BookingCard({ booking }: { booking: Booking }) {
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{service.name}</h3>
+          <h3 className="text-lg font-semibold">{booking.service?.name}</h3>
           <p className="text-gray-600">{formatPrice(booking.price)}</p>
         </div>
         <span className={cn(
@@ -91,7 +62,7 @@ function BookingCard({ booking }: { booking: Booking }) {
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <MapPin className="w-4 h-4" />
-          <span>123 Sample Street, City</span>
+          <span>{booking.address}</span>
         </div>
       </div>
 
@@ -122,9 +93,13 @@ function BookingCard({ booking }: { booking: Booking }) {
 }
 
 export function Bookings() {
+  const { bookings, loading, error } = useBookings();
   const [filter, setFilter] = React.useState<'all' | 'upcoming' | 'completed'>('all');
 
-  const filteredBookings = MOCK_BOOKINGS.filter(booking => {
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error} />;
+
+  const filteredBookings = bookings.filter(booking => {
     if (filter === 'upcoming') {
       return ['pending', 'confirmed'].includes(booking.status);
     }

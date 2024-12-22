@@ -1,19 +1,35 @@
+
 import { useParams } from 'react-router-dom';
 import { Star, Clock, MapPin, DollarSign } from 'lucide-react';
 import { ServiceReviews } from '../../components/services/ServiceReviews';
 import { ServiceProvider } from '../../components/services/ServiceProvider';
-import { BookingForm, BookingFormData } from '../../components/booking/BookingForm';
-import { useService } from '../../hooks/useService'
+import { BookingForm, type BookingFormData } from '../../components/booking/BookingForm';
+import { useService } from '../../hooks/useService';
+import { useCreateBooking } from '../../hooks/useCreateBooking';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 
 export function ServiceDetails() {
   const { id } = useParams();
   const { service, loading, error } = useService(id);
+  const { createBooking, loading: bookingLoading } = useCreateBooking();
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   if (!service) return <ErrorMessage message="Service not found" />;
+
+  const handleBookingSubmit = async (formData: BookingFormData) => {
+    try {
+      await createBooking({
+        serviceId: service.id,
+        ...formData,
+        date: '',
+        time: ''
+      });
+    } catch (error) {
+      // Error is handled by the hook
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -59,9 +75,10 @@ export function ServiceDetails() {
         {/* Booking Sidebar */}
         <div>
           <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
-            <BookingForm service={service} onSubmit={function (data: BookingFormData): void {
-              throw new Error('Function not implemented.');
-            } } />
+            <BookingForm 
+              service={service} 
+              onSubmit={handleBookingSubmit}
+            />
           </div>
         </div>
       </div>

@@ -1,17 +1,12 @@
 import api from '../api';
 import { API_ENDPOINTS } from '../../config/api';
-import { type Service } from '../../types';
-import { type CreateServiceData, type UpdateServiceData} from '../../types/service'
+import { type Service } from '../../types/index';
+import { type CreateServiceData, type UpdateServiceData,type ServiceFilters} from '../../types/service'
 
 export const serviceApi = {
   // Get all services with optional filters
-  getServices: async (params?: {
-    category?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    rating?: number;
-  }): Promise<Service[]> => {
-    const response = await api.get(API_ENDPOINTS.services.list, { params });
+  getServices: async (filters?: ServiceFilters): Promise<Service[]> => {
+    const response = await api.get(API_ENDPOINTS.services.list, { params: filters });
     return response.data;
   },
 
@@ -39,11 +34,8 @@ export const serviceApi = {
   },
 
   // Update service availability
-//   updateAvailability: async (id: string, availability: any): Promise<Service> => {
-//     const response = await api.put(
-//       API_ENDPOINTS.services.availability(id),
-//       { availability }
-//     );
-//     return response.data;
-//   },
+  updateAvailability: async (id: string, availability: any[]): Promise<Service> => {
+    const response = await api.put(`${API_ENDPOINTS.services.list}/${id}/availability`, { availability });
+    return response.data;
+  },
 };

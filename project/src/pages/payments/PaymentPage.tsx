@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { PaymentForm } from '../../components/payments/PaymentForm';
 import { PaymentSummary } from '../../components/payments/PaymentSummary';
-import { useBooking } from '../../hooks/useBooking';
+import { useBooking } from '../../hooks/useBookings';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 

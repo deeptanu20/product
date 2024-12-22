@@ -1,127 +1,78 @@
-import React, { useState } from 'react';
-// import { Camera } from 'lucide-react';
-// import { toast } from 'react-hot-toast';
-import type { CreateServiceData } from '../types/service';
+import  { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { BookingCalendar } from '../components/booking/BookingCalendar';
+import { BookingForm, type BookingFormData } from '../components/booking/BookingForm';
+import { BookingConfirmation } from '../components/booking/BookingConfirmation';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { useService } from '../hooks/useService';
+import { useCreateBooking } from '../hooks/useCreateBooking';
 
-interface ServiceFormProps {
-  onSubmit: (data: CreateServiceData) => Promise<void>;
-  loading?: boolean;
-  initialData?: Partial<CreateServiceData>;
-}
+export function BookingPage() {
+  const { serviceId } = useParams();
+  const { service, loading: serviceLoading, error: serviceError } = useService(serviceId);
+  const { createBooking, loading: bookingLoading } = useCreateBooking();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [booking, setBooking] = useState<any>(null);
 
-export function ServiceForm({ onSubmit, loading, initialData }: ServiceFormProps) {
-  const [formData, setFormData] = useState<CreateServiceData>({
-    name: initialData?.name || '',
-    description: initialData?.description || '',
-    category: initialData?.category || '',
-    price: initialData?.price || 0,
-    image: initialData?.image || '',
-  });
+  if (serviceLoading) return <LoadingSpinner />;
+  if (serviceError) return <ErrorMessage message={serviceError} />;
+  if (!service) return <ErrorMessage message="Service not found" />;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const availableTimeSlots = [
+    { time: '09:00', available: true },
+    { time: '10:00', available: true },
+    { time: '11:00', available: false },
+    { time: '12:00', available: true },
+    { time: '13:00', available: true },
+    { time: '14:00', available: true },
+    { time: '15:00', available: false },
+    { time: '16:00', available: true },
+  ];
+
+  const handleBookingSubmit = async (formData: BookingFormData) => {
+    if (!selectedDate || !selectedTime) {
+      return;
+    }
+
     try {
-      await onSubmit(formData);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const newBooking = await createBooking({
+        serviceId: service.id,
+        date: selectedDate.toISOString(),
+        time: selectedTime,
+        ...formData,
+      });
+      setBooking(newBooking);
     } catch (error) {
       // Error is handled by the hook
     }
   };
 
+  if (booking) {
+    return <BookingConfirmation booking={booking} />;
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Service Name
-        </label>
-        <input
-          type="text"
-          required
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-8">Book {service.name}</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <BookingCalendar
+          selectedDate={selectedDate}
+          onDateSelect={setSelectedDate}
+          selectedTime={selectedTime}
+          onTimeSelect={setSelectedTime}
+          availableTimeSlots={availableTimeSlots}
         />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Description
-        </label>
-        <textarea
-          required
-          rows={4}
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Category
-        </label>
-        <select
-          required
-          value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-        >
-          <option value="">Select a category</option>
-          <option value="Cleaning">Cleaning</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Gardening">Gardening</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Price
-        </label>
-        <div className="mt-1 relative rounded-md shadow-sm">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span className="text-gray-500 sm:text-sm">$</span>
-          </div>
-          <input
-            type="number"
-            required
-            min="0"
-            step="0.01"
-            value={formData.price}
-            onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-            className="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        
+        <div>
+          <BookingForm
+            service={service}
+            onSubmit={handleBookingSubmit}
           />
         </div>
       </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Image URL
-        </label>
-        <div className="mt-1 flex items-center gap-4">
-          <input
-            type="url"
-            value={formData.image}
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-          {formData.image && (
-            <img
-              src={formData.image}
-              alt="Preview"
-              className="h-12 w-12 object-cover rounded-md"
-            />
-          )}
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-      >
-        {loading ? 'Saving...' : 'Save Service'}
-      </button>
-    </form>
+    </div>
   );
 }

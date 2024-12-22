@@ -22,6 +22,7 @@ export function ServiceForm({ onSubmit, loading, initialData }: ServiceFormProps
     e.preventDefault();
     try {
       await onSubmit(formData);
+      
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // Error is handled by the hook
