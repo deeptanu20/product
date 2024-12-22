@@ -7,7 +7,6 @@ export interface Service {
   image: string;
   rating: number;
   reviews: Review[];
-<<<<<<< HEAD
   provider: Provider;
 }
 
@@ -19,8 +18,6 @@ export interface Provider {
   rating: number;
   reviewCount: number;
   verified: boolean;
-=======
->>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 }
 
 export interface Review {
@@ -34,7 +31,6 @@ export interface Review {
 
 export interface Booking {
   id: string;
-<<<<<<< HEAD
   service: Service;
   user: {
     id: string;
@@ -48,11 +44,4 @@ export interface Booking {
   address: string;
   notes?: string;
   paymentStatus: 'pending' | 'completed' | 'refunded';
-=======
-  serviceId: string;
-  userId: string;
-  date: string;
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
-  price: number;
->>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 }

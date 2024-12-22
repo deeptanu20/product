@@ -1,10 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
-<<<<<<< HEAD
 import { toast } from 'react-hot-toast';
 import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
-=======
-import { API_BASE_URL } from '../config/api';
->>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -14,15 +11,14 @@ const api = axios.create({
 });
 
 // Add auth token to requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     config.headers.Authorization = Bearer ${token};
+//   }
+//   return config;
+// });
 
-<<<<<<< HEAD
 // Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
@@ -63,6 +59,4 @@ export const createPayment = async (data: any) => {
   return response.data;
 };
 
-=======
->>>>>>> 7c0fb2fb64e86a60a1867dbfd07fe6b0067767d1
 export default api;

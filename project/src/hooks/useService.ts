@@ -1,31 +1,34 @@
 import { useState, useEffect } from 'react';
-import { fetchService } from '../lib/api';
-import { type Service } from '../types';
+import { serviceApi } from '../lib/api/service';
+import type { Service } from '../types';
 
-export function useService(id: string | undefined) {
-  const [service, setService] = useState<Service | null>(null);
+export function useServices(filters?: {
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  rating?: number;
+}) {
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadService = async () => {
-      if (!id) return;
-      
+    const fetchServices = async () => {
       try {
         setLoading(true);
-        const data = await fetchService(id);
-        setService(data);
+        const data = await serviceApi.getServices(filters);
+        setServices(data);
         setError(null);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        setError('Failed to fetch service details');
-        setService(null);
+        setError('Failed to fetch services');
       } finally {
         setLoading(false);
       }
     };
 
-    loadService();
-  }, [id]);
+    fetchServices();
+  }, [filters]);
 
-  return { service, loading, error };
+  return { services, loading, error };
 }
